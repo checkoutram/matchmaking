@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#4a0e0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Thirumana Porutham - Tamil Astrology Matchmaking</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;600;700&family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #4a0e0e; --primary-light: #6b1c1c; --primary-dark: #2d0808;
+    --gold: #d4af37; --gold-light: #f4d03f; --gold-dark: #b8860b;
+    --cream: #faf6f0; --cream-dark: #f0e6d3; --text: #2c1810; --text-light: #6b5b4f;
+    --success: #2e7d32; --warning: #ef6c00; --danger: #c62828; --white: #ffffff;
+    --shadow: 0 4px 20px rgba(74,14,14,0.15); --shadow-lg: 0 10px 40px rgba(74,14,14,0.2);
+    --radius: 16px; --radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Inter','Noto Sans Tamil',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; overflow-x:hidden; line-height:1.6; }
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--cream-dark); }
+::-webkit-scrollbar-thumb { background:var(--gold-dark); border-radius:3px; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideIn { from{opacity:0;transform:translateX(-30px)} to{opacity:1;transform:translateX(0)} }
+@keyframes scaleIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+@keyframes rotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.animate-fade { animation:fadeIn 0.5s ease-out forwards; }
+.animate-slide { animation:slideIn 0.4s ease-out forwards; }
+.animate-scale { animation:scaleIn 0.3s ease-out forwards; }
+#app { max-width:480px; margin:0 auto; min-height:100vh; position:relative; background:var(--cream); box-shadow:0 0 60px rgba(0,0,0,0.1); }
+@media(min-width:481px){ #app { min-height:calc(100vh-40px); margin:20px auto; border-radius:24px; overflow:hidden; } }
+.header { background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%); color:var(--gold); padding:16px 20px; position:sticky; top:0; z-index:100; box-shadow:var(--shadow); }
+.header-content { display:flex; align-items:center; justify-content:space-between; }
+.header-left { display:flex; align-items:center; gap:10px; flex:1; }
+.header h1 { font-family:'Cinzel',serif; font-size:1.2rem; font-weight:700; letter-spacing:1px; }
+.header-sub { font-size:0.65rem; opacity:0.8; margin-top:2px; color:var(--cream-dark); }
+.header-icon { width:36px; height:36px; background:rgba(212,175,55,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; border:1px solid rgba(212,175,55,0.3); flex-shrink:0; }
+.lang-toggle { background:rgba(212,175,55,0.2); border:1px solid rgba(212,175,55,0.4); color:var(--gold); padding:6px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.2s; font-family:'Noto Sans Tamil','Inter',sans-serif; white-space:nowrap; }
+.lang-toggle:hover { background:rgba(212,175,55,0.3); }
+.lang-toggle:active { transform:scale(0.95); }
+.back-btn { background:none; border:none; color:var(--gold); font-size:1.4rem; cursor:pointer; padding:6px; margin:-6px; display:flex; align-items:center; transition:transform 0.2s; flex-shrink:0; }
+.back-btn:active { transform:scale(0.9); }
+.screen { display:none; padding:20px; min-height:calc(100vh - 80px); animation:fadeIn 0.4s ease-out; }
+.screen.active { display:block; }
+.card { background:var(--white); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid rgba(212,175,55,0.1); transition:transform 0.2s,box-shadow 0.2s; }
+.card:active { transform:scale(0.98); }
+.card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.card-icon { width:48px; height:48px; background:linear-gradient(135deg,var(--gold-light),var(--gold)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; box-shadow:0 4px 12px rgba(212,175,55,0.3); }
+.card-title { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--primary); font-weight:600; }
+.card-subtitle { font-size:0.8rem; color:var(--text-light); }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 28px; border:none; border-radius:12px; font-family:inherit; font-size:1rem; font-weight:600; cursor:pointer; transition:all 0.2s; width:100%; margin-bottom:12px; }
+.btn-primary { background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%); color:var(--gold); box-shadow:0 4px 16px rgba(74,14,14,0.3); }
+.btn-primary:active { transform:translateY(2px); box-shadow:0 2px 8px rgba(74,14,14,0.3); }
+.btn-gold { background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 100%); color:var(--primary-dark); box-shadow:0 4px 16px rgba(212,175,55,0.3); }
+.btn-gold:active { transform:translateY(2px); }
+.btn-outline { background:transparent; color:var(--primary); border:2px solid var(--gold); }
+.btn-outline:active { background:rgba(212,175,55,0.1); }
+.btn-danger { background:linear-gradient(135deg,var(--danger),#b71c1c); color:white; }
+.btn-sm { padding:8px 16px; font-size:0.85rem; width:auto; }
+.form-group { margin-bottom:20px; }
+.form-label { display:block; font-weight:600; color:var(--primary); margin-bottom:8px; font-size:0.9rem; }
+.form-label .required { color:var(--danger); margin-left:4px; }
+.form-input,.form-select { width:100%; padding:14px 16px; border:2px solid var(--cream-dark); border-radius:var(--radius-sm); font-family:inherit; font-size:1rem; background:var(--white); color:var(--text); transition:border-color 0.2s,box-shadow 0.2s; }
+.form-input:focus,.form-select:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 4px rgba(212,175,55,0.15); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.form-hint { font-size:0.75rem; color:var(--text-light); margin-top:6px; }
+.profile-card { background:linear-gradient(135deg,var(--white) 0%,var(--cream) 100%); border-radius:var(--radius); padding:16px; margin-bottom:12px; border:2px solid transparent; box-shadow:var(--shadow); cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+.profile-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(to bottom,var(--gold),var(--gold-dark)); }
+.profile-card:hover { border-color:var(--gold); transform:translateX(4px); }
+.profile-card.selected { border-color:var(--gold); background:linear-gradient(135deg,rgba(212,175,55,0.1),var(--white)); }
+.profile-header { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.profile-avatar { width:50px; height:50px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:700; font-family:'Cinzel',serif; border:2px solid var(--gold); }
+.profile-info h3 { font-size:1rem; color:var(--primary); margin-bottom:2px; }
+.profile-info p { font-size:0.8rem; color:var(--text-light); }
+.profile-badges { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+.badge { padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; background:rgba(212,175,55,0.15); color:var(--primary); border:1px solid rgba(212,175,55,0.3); }
+.badge-nakshatra { background:rgba(46,125,50,0.1); color:var(--success); border-color:rgba(46,125,50,0.3); }
+.badge-rasi { background:rgba(239,108,0,0.1); color:var(--warning); border-color:rgba(239,108,0,0.3); }
+.score-container { display:flex; flex-direction:column; align-items:center; padding:30px 20px; background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%); border-radius:var(--radius); margin-bottom:20px; position:relative; overflow:hidden; }
+.score-container::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle,rgba(212,175,55,0.1) 0%,transparent 70%); animation:rotate 20s linear infinite; }
+.score-circle { width:160px; height:160px; border-radius:50%; background:conic-gradient(var(--gold) calc(var(--score)*3.6deg),rgba(255,255,255,0.1) 0deg); display:flex; align-items:center; justify-content:center; position:relative; box-shadow:0 0 40px rgba(212,175,55,0.3); }
+.score-circle-inner { width:130px; height:130px; border-radius:50%; background:var(--primary-dark); display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px solid var(--gold); }
+.score-value { font-family:'Cinzel',serif; font-size:2.5rem; font-weight:700; color:var(--gold); line-height:1; }
+.score-label { font-size:0.8rem; color:var(--cream-dark); margin-top:4px; }
+.score-verdict { margin-top:16px; font-family:'Cinzel',serif; font-size:1.3rem; color:var(--gold); text-align:center; position:relative; z-index:1; }
+.score-sub { font-size:0.85rem; color:var(--cream-dark); text-align:center; margin-top:8px; position:relative; z-index:1; opacity:0.9; }
+.factor-list { margin-top:16px; }
+.factor-item { margin-bottom:16px; }
+.factor-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.factor-name { font-weight:600; color:var(--primary); font-size:0.9rem; }
+.factor-score { font-weight:700; color:var(--gold-dark); font-size:0.9rem; }
+.factor-bar-bg { height:8px; background:var(--cream-dark); border-radius:4px; overflow:hidden; }
+.factor-bar-fill { height:100%; border-radius:4px; transition:width 1s ease-out; background:linear-gradient(90deg,var(--gold-light),var(--gold)); }
+.factor-bar-fill.low { background:linear-gradient(90deg,#ef5350,var(--danger)); }
+.factor-bar-fill.medium { background:linear-gradient(90deg,#ffa726,var(--warning)); }
+.factor-bar-fill.high { background:linear-gradient(90deg,#66bb6a,var(--success)); }
+.factor-desc { font-size:0.8rem; color:var(--text-light); margin-top:4px; }
+.procon-grid { display:grid; grid-template-columns:1fr; gap:12px; }
+.procon-card { padding:16px; border-radius:var(--radius-sm); border-left:4px solid; }
+.procon-card.advantage { background:rgba(46,125,50,0.08); border-left-color:var(--success); }
+.procon-card.disadvantage { background:rgba(198,40,40,0.08); border-left-color:var(--danger); }
+.procon-title { font-weight:700; font-size:0.9rem; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.procon-card.advantage .procon-title { color:var(--success); }
+.procon-card.disadvantage .procon-title { color:var(--danger); }
+.procon-text { font-size:0.85rem; color:var(--text); }
+.horo-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:12px; }
+.horo-item { background:var(--cream); padding:14px; border-radius:var(--radius-sm); text-align:center; border:1px solid rgba(212,175,55,0.2); }
+.horo-item-label { font-size:0.75rem; color:var(--text-light); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.horo-item-value { font-family:'Cinzel',serif; font-size:1rem; color:var(--primary); font-weight:600; }
+.horo-item-tamil { font-family:'Noto Sans Tamil',sans-serif; font-size:0.8rem; color:var(--gold-dark); margin-top:2px; }
+.empty-state { text-align:center; padding:40px 20px; color:var(--text-light); }
+.empty-icon { font-size:4rem; margin-bottom:16px; opacity:0.5; }
+.empty-title { font-family:'Cinzel',serif; font-size:1.2rem; color:var(--primary); margin-bottom:8px; }
+.match-pair { display:flex; align-items:center; justify-content:center; gap:16px; padding:20px; background:linear-gradient(135deg,var(--cream) 0%,var(--white) 100%); border-radius:var(--radius); margin-bottom:20px; border:2px solid rgba(212,175,55,0.2); }
+.match-person { text-align:center; flex:1; }
+.match-person-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:700; margin:0 auto 8px; border:2px solid var(--gold); }
+.match-person-name { font-weight:700; color:var(--primary); font-size:0.95rem; }
+.match-person-detail { font-size:0.75rem; color:var(--text-light); }
+.match-heart { font-size:2rem; color:var(--danger); animation:pulse 2s infinite; }
+.history-item { background:var(--white); border-radius:var(--radius-sm); padding:14px; margin-bottom:10px; border-left:4px solid var(--gold); box-shadow:0 2px 8px rgba(0,0,0,0.05); display:flex; justify-content:space-between; align-items:center; }
+.history-names { font-weight:600; color:var(--primary); font-size:0.9rem; }
+.history-date { font-size:0.75rem; color:var(--text-light); margin-top:2px; }
+.history-score { font-family:'Cinzel',serif; font-size:1.2rem; font-weight:700; color:var(--gold-dark); }
+.modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
+.modal-overlay.active { display:flex; }
+.modal { background:var(--white); border-radius:var(--radius); max-width:400px; width:100%; max-height:80vh; overflow-y:auto; box-shadow:var(--shadow-lg); animation:scaleIn 0.3s ease-out; }
+.modal-header { padding:20px; border-bottom:1px solid var(--cream-dark); display:flex; justify-content:space-between; align-items:center; }
+.modal-title { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--primary); }
+.modal-close { background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--text-light); }
+.modal-body { padding:20px; }
+.modal-footer { padding:16px 20px; border-top:1px solid var(--cream-dark); display:flex; gap:10px; }
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--primary); color:var(--gold); padding:14px 24px; border-radius:12px; font-weight:600; box-shadow:var(--shadow-lg); z-index:2000; transition:transform 0.3s ease-out; max-width:90%; text-align:center; }
+.toast.show { transform:translateX(-50%) translateY(0); }
+.loading { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; }
+.loading-spinner { width:50px; height:50px; border:3px solid var(--cream-dark); border-top-color:var(--gold); border-radius:50%; animation:rotate 0.8s linear infinite; margin-bottom:16px; }
+.loading-text { color:var(--text-light); font-size:0.9rem; }
+.welcome-hero { text-align:center; padding:40px 20px; background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%); color:var(--gold); border-radius:0 0 var(--radius) var(--radius); margin:-20px -20px 20px -20px; position:relative; overflow:hidden; }
+.welcome-hero h2 { font-family:'Cinzel',serif; font-size:1.8rem; margin-bottom:12px; position:relative; z-index:1; }
+.welcome-hero p { opacity:0.9; font-size:0.95rem; position:relative; z-index:1; max-width:300px; margin:0 auto; }
+.feature-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:20px 0; }
+.feature-item { background:var(--white); padding:16px; border-radius:var(--radius-sm); text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.05); border:1px solid rgba(212,175,55,0.15); }
+.feature-icon { font-size:1.8rem; margin-bottom:8px; }
+.feature-title { font-weight:600; font-size:0.85rem; color:var(--primary); }
+.feature-desc { font-size:0.75rem; color:var(--text-light); margin-top:4px; }
+.selection-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:16px; }
+.selection-card { background:var(--white); border-radius:var(--radius); padding:16px; border:2px solid var(--cream-dark); cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:12px; }
+.selection-card:hover { border-color:var(--gold); }
+.selection-card.selected { border-color:var(--gold); background:linear-gradient(135deg,rgba(212,175,55,0.1),var(--white)); box-shadow:0 4px 16px rgba(212,175,55,0.2); }
+.selection-check { width:28px; height:28px; border-radius:50%; border:2px solid var(--cream-dark); display:flex; align-items:center; justify-content:center; font-size:0.9rem; transition:all 0.2s; flex-shrink:0; }
+.selection-card.selected .selection-check { background:var(--gold); border-color:var(--gold); color:var(--primary-dark); }
+.selection-info h4 { color:var(--primary); font-size:0.95rem; }
+.selection-info p { font-size:0.8rem; color:var(--text-light); }
+.remedy-card { background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(212,175,55,0.05)); border:1px solid rgba(212,175,55,0.3); border-radius:var(--radius-sm); padding:16px; margin-top:12px; }
+.remedy-title { font-weight:700; color:var(--gold-dark); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.remedy-list { list-style:none; }
+.remedy-list li { padding:6px 0; font-size:0.85rem; color:var(--text); display:flex; align-items:flex-start; gap:8px; }
+.remedy-list li::before { content:'✦'; color:var(--gold); flex-shrink:0; }
+.share-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
+.share-btn { padding:12px; border-radius:var(--radius-sm); border:1px solid var(--cream-dark); background:var(--white); cursor:pointer; text-align:center; transition:all 0.2s; font-size:0.8rem; color:var(--text); }
+.share-btn:hover { border-color:var(--gold); background:var(--cream); }
+.share-btn .icon { font-size:1.3rem; display:block; margin-bottom:4px; }
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:20px 0; opacity:0.5; }
+.section-title { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--primary); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.section-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin-left:8px; }
+@media(max-width:400px){ .form-row{grid-template-columns:1fr} .horo-grid{grid-template-columns:1fr} .score-value{font-size:2rem} }
+@media print { .header,.btn,.back-btn,.share-grid,.lang-toggle{display:none!important} .screen{display:block!important} body{background:white} #app{box-shadow:none;max-width:100%} }
+</style>
+</head>
+<body>
+<div id="app">
+<header class="header" id="header">
+    <div class="header-content">
+        <div class="header-left">
+            <button class="back-btn" id="backBtn" style="display:none;" onclick="goBack()">←</button>
+            <div class="header-icon">☸</div>
+            <div>
+                <h1 id="headerTitle">Thirumana Porutham</h1>
+                <div class="header-sub" id="headerSub">Tamil Astrology Matchmaking</div>
+            </div>
+        </div>
+        <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()">தமிழ்</button>
+    </div>
+</header>
+
+<!-- Screen: Welcome -->
+<div class="screen active" id="screen-welcome">
+    <div class="welcome-hero">
+        <div style="font-size:4rem;margin-bottom:16px;animation:float 3s ease-in-out infinite;">☸</div>
+        <h2 data-i18n="welcomeTitle">Thirumana Porutham</h2>
+        <p data-i18n="welcomeSub">Discover your cosmic compatibility through ancient Tamil astrology. Generate horoscopes and find your perfect match based on Panchagam principles.</p>
+    </div>
+    <div class="feature-grid">
+        <div class="feature-item">
+            <div class="feature-icon">🌙</div>
+            <div class="feature-title" data-i18n="nakshatraAnalysis">Nakshatra Analysis</div>
+            <div class="feature-desc" data-i18n="nakshatraDesc">27 star-based compatibility</div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">♈</div>
+            <div class="feature-title" data-i18n="rasiMatching">Rasi Matching</div>
+            <div class="feature-desc" data-i18n="rasiDesc">12 zodiac sign harmony</div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">⚖️</div>
+            <div class="feature-title" data-i18n="ashtakoota">Ashtakoota</div>
+            <div class="feature-desc" data-i18n="ashtakootaDesc">8-factor scoring system</div>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">📿</div>
+            <div class="feature-title" data-i18n="panchagam">Panchagam</div>
+            <div class="feature-desc" data-i18n="panchagamDesc">Tamil almanac based</div>
+        </div>
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('home')" style="margin-top:20px;">
+        <span>✨</span> <span data-i18n="beginJourney">Begin Your Journey</span>
+    </button>
+    <button class="btn btn-outline" onclick="showScreen('about')">
+        <span>📖</span> <span data-i18n="learnMore">Learn More</span>
+    </button>
+</div>
+
+<!-- Screen: Home -->
+<div class="screen" id="screen-home">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-family:'Cinzel',serif;color:var(--primary);font-size:1.2rem;" data-i18n="profiles">Profiles</h2>
+        <button class="btn btn-sm btn-gold" onclick="showScreen('addProfile')" data-i18n="addProfile">+ Add Profile</button>
+    </div>
+    <div id="profilesList"></div>
+    <div class="divider"></div>
+    <h2 style="font-family:'Cinzel',serif;color:var(--primary);font-size:1.2rem;margin-bottom:16px;" data-i18n="matchHistory">Match History</h2>
+    <div id="historyList"></div>
+    <div id="matchActionArea" style="display:none;margin-top:20px;">
+        <button class="btn btn-primary" onclick="showScreen('matchSelect')">
+            <span>💕</span> <span data-i18n="startMatch">Start New Match</span>
+        </button>
+    </div>
+</div>
+
+<!-- Screen: Add Profile -->
+<div class="screen" id="screen-addProfile">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon">👤</div>
+            <div>
+                <div class="card-title" data-i18n="createProfile">Create Profile</div>
+                <div class="card-subtitle" data-i18n="createProfileSub">Enter birth details for horoscope</div>
+            </div>
+        </div>
+        <form id="profileForm" onsubmit="saveProfile(event)">
+            <div class="form-group">
+                <label class="form-label"><span data-i18n="fullName">Full Name</span> <span class="required">*</span></label>
+                <input type="text" class="form-input" id="pName" placeholder="e.g., Arun Kumar" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span data-i18n="gender">Gender</span> <span class="required">*</span></label>
+                <select class="form-select" id="pGender" required>
+                    <option value="" data-i18n="selectGender">Select Gender</option>
+                    <option value="male" data-i18n="male">Male</option>
+                    <option value="female" data-i18n="female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span data-i18n="dateOfBirth">Date of Birth</span> <span class="required">*</span></label>
+                <input type="date" class="form-input" id="pDob" required>
+                <div class="form-hint" data-i18n="dobHint">Enter date as per Gregorian calendar</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span data-i18n="timeOfBirth">Time of Birth</span> <span class="required">*</span></label>
+                <input type="time" class="form-input" id="pTime" required step="60">
+                <div class="form-hint" data-i18n="timeHint">Enter local time (24-hour format preferred)</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label"><span data-i18n="birthPlace">Birth Place / City</span> <span class="required">*</span></label>
+                <input type="text" class="form-input" id="pPlace" placeholder="e.g., Chennai, Tamil Nadu" required>
+                <div class="form-hint" data-i18n="placeHint">City name for timezone reference</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" data-i18n="latitude">Latitude</label>
+                    <input type="number" class="form-input" id="pLat" placeholder="13.08" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-i18n="longitude">Longitude</label>
+                    <input type="number" class="form-input" id="pLng" placeholder="80.27" step="0.01">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top:8px;">
+                <span>🔮</span> <span data-i18n="generateHoroscope">Generate Horoscope</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Screen: View Horoscope -->
+<div class="screen" id="screen-horoscope">
+    <div id="horoscopeContent"></div>
+    <button class="btn btn-outline" onclick="showScreen('home')" data-i18n="backToProfiles">Back to Profiles</button>
+</div>
+
+<!-- Screen: Match Selection -->
+<div class="screen" id="screen-matchSelect">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-icon">💕</div>
+            <div>
+                <div class="card-title" data-i18n="selectPair">Select Pair</div>
+                <div class="card-subtitle" data-i18n="selectPairSub">Choose two profiles to match</div>
+            </div>
+        </div>
+        <div style="margin-bottom:16px;">
+            <div style="font-weight:600;color:var(--primary);margin-bottom:8px;font-size:0.9rem;" data-i18n="person1">Person 1 (Male / Groom)</div>
+            <div id="selectPerson1" class="selection-grid"></div>
+        </div>
+        <div style="margin-bottom:16px;">
+            <div style="font-weight:600;color:var(--primary);margin-bottom:8px;font-size:0.9rem;" data-i18n="person2">Person 2 (Female / Bride)</div>
+            <div id="selectPerson2" class="selection-grid"></div>
+        </div>
+        <button class="btn btn-primary" id="matchBtn" onclick="performMatch()" disabled style="opacity:0.5;">
+            <span>✨</span> <span data-i18n="calculate">Calculate Compatibility</span>
+        </button>
+    </div>
+</div>
+
+<!-- Screen: Match Results -->
+<div class="screen" id="screen-results">
+    <div id="resultsContent"></div>
+</div>
+
+<!-- Screen: About -->
+<div class="screen" id="screen-about">
+    <div class="card">
+        <div style="text-align:center;padding:20px 0;">
+            <div style="font-size:3rem;margin-bottom:12px;">☸</div>
+            <h2 style="font-family:'Cinzel',serif;color:var(--primary);" data-i18n="appTitle">Thirumana Porutham</h2>
+            <p style="color:var(--text-light);font-size:0.9rem;margin-top:8px;">Version 1.0 • <span data-i18n="appSubtitle">Tamil Astrology Matchmaking</span></p>
+        </div>
+        <div class="divider"></div>
+        <h3 style="font-family:'Cinzel',serif;color:var(--primary);margin-bottom:12px;font-size:1rem;" data-i18n="aboutTitle">About Ashtakoota Matching</h3>
+        <p style="font-size:0.9rem;color:var(--text);margin-bottom:16px;line-height:1.7;" data-i18n="aboutDesc">Ashtakoota is the traditional 8-factor compatibility system used in Tamil/Vedic astrology for marriage matching. Each factor evaluates a different dimension of compatibility:</p>
+        <div style="display:grid;gap:10px;margin-bottom:20px;" id="aboutFactors"></div>
+        <div class="divider"></div>
+        <h3 style="font-family:'Cinzel',serif;color:var(--primary);margin-bottom:12px;font-size:1rem;" data-i18n="scoreInterpretation">Score Interpretation</h3>
+        <div style="display:grid;gap:8px;" id="aboutScores"></div>
+        <div class="divider"></div>
+        <p style="font-size:0.8rem;color:var(--text-light);text-align:center;font-style:italic;" data-i18n="note">Note: This app uses simplified astronomical calculations for demonstration. For precise matchmaking, consult a professional astrologer with full ephemeris data.</p>
+    </div>
+    <button class="btn btn-primary" onclick="showScreen('welcome')" data-i18n="beginJourney">Back to Home</button>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title" data-i18n="deleteProfile">Delete Profile</div>
+            <button class="modal-close" onclick="closeModal('deleteModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text);font-size:0.9rem;" id="deleteConfirmText">Are you sure you want to delete <strong id="deleteName"></strong>? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline btn-sm" onclick="closeModal('deleteModal')" style="flex:1;" data-i18n="cancel">Cancel</button>
+            <button class="btn btn-danger btn-sm" id="confirmDeleteBtn" style="flex:1;" data-i18n="delete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===================== TRANSLATIONS =====================
+const TRANSLATIONS = {
+    "en": {
+        "appTitle": "Thirumana Porutham", "appSubtitle": "Tamil Astrology Matchmaking",
+        "welcomeTitle": "Thirumana Porutham", "welcomeSub": "Discover your cosmic compatibility through ancient Tamil astrology. Generate horoscopes and find your perfect match based on Panchagam principles.",
+        "beginJourney": "Begin Your Journey", "learnMore": "Learn More",
+        "profiles": "Profiles", "addProfile": "+ Add Profile", "matchHistory": "Match History",
+        "noProfiles": "No Profiles Yet", "noProfilesDesc": "Add your first profile to begin matchmaking",
+        "noMatches": "No matches calculated yet", "startMatch": "Start New Match",
+        "createProfile": "Create Profile", "createProfileSub": "Enter birth details for horoscope",
+        "fullName": "Full Name", "gender": "Gender", "selectGender": "Select Gender",
+        "male": "Male", "female": "Female",
+        "dateOfBirth": "Date of Birth", "dobHint": "Enter date as per Gregorian calendar",
+        "timeOfBirth": "Time of Birth", "timeHint": "Enter local time (24-hour format preferred)",
+        "birthPlace": "Birth Place / City", "placeHint": "City name for timezone reference",
+        "latitude": "Latitude", "longitude": "Longitude",
+        "generateHoroscope": "Generate Horoscope", "horoscope": "Horoscope",
+        "birthDetails": "Birth Details", "panchagamDetails": "Panchagam Details",
+        "dashaTiming": "Dasha & Timing",
+        "dashaText": "Based on your birth nakshatra {nakshatra}, your Vimshottari Dasha sequence begins with {lord} Mahadasha. The current planetary period influences your life path, career, relationships, and health. For detailed Dasha-Bhukti analysis, consult a professional astrologer.",
+        "backToProfiles": "Back to Profiles",
+        "selectPair": "Select Pair", "selectPairSub": "Choose two profiles to match",
+        "person1": "Person 1 (Male / Groom)", "person2": "Person 2 (Female / Bride)",
+        "calculate": "Calculate Compatibility", "compatibility": "Compatibility",
+        "compatibilityFactors": "Compatibility Factors", "advantages": "Advantages",
+        "disadvantages": "Disadvantages", "remedies": "Suggested Remedies",
+        "vedicRemedies": "Vedic Remedies", "shareResult": "Share Result",
+        "copy": "Copy", "print": "Print", "home": "Home", "matchAnother": "Match Another Pair",
+        "aboutTitle": "About Ashtakoota Matching",
+        "aboutDesc": "Ashtakoota (அஷ்டகூடம்) is the traditional 8-factor compatibility system used in Tamil/Vedic astrology for marriage matching. Each factor evaluates a different dimension of compatibility:",
+        "scoreInterpretation": "Score Interpretation",
+        "excellent": "Excellent Match", "excellentRange": "28-36 / 78-100", "excellentDesc": "Highly recommended match",
+        "good": "Good Match", "goodRange": "18-27 / 50-77", "goodDesc": "Acceptable with minor remedies",
+        "challenging": "Challenging Match", "challengingRange": "0-17 / 0-49", "challengingDesc": "Significant remedies needed",
+        "note": "Note: This app uses simplified astronomical calculations for demonstration. For precise matchmaking, consult a professional astrologer with full ephemeris data.",
+        "deleteProfile": "Delete Profile", "deleteConfirm": "Are you sure you want to delete {name}? This action cannot be undone.",
+        "cancel": "Cancel", "delete": "Delete", "profileDeleted": "Profile deleted",
+        "resultCopied": "Result copied to clipboard!", "requiredFields": "Please fill all required fields",
+        "horoscopeGenerated": "Horoscope generated successfully!",
+        "nakshatraAnalysis": "Nakshatra Analysis", "nakshatraDesc": "27 star-based compatibility",
+        "rasiMatching": "Rasi Matching", "rasiDesc": "12 zodiac sign harmony",
+        "ashtakoota": "Ashtakoota", "ashtakootaDesc": "8-factor scoring system",
+        "panchagam": "Panchagam", "panchagamDesc": "Tamil almanac based",
+        "outOf100": "out of 100", "ashtakootaScore": "Ashtakoota Score",
+        "day": "Day", "nakshatra": "Nakshatra", "pada": "Pada", "rasi": "Rasi",
+        "rasiLord": "Rasi Lord", "nakshatraLord": "Nakshatra Lord", "gana": "Gana",
+        "yoni": "Yoni", "nadi": "Nadi", "varna": "Varna", "vashya": "Vashya",
+        "tithi": "Tithi", "tamilMonth": "Tamil Month", "tamilMonthLabel": "Tamil Month",
+        "lord": "Lord", "element": "Element", "score": "Score", "verdict": "Verdict",
+        "excellentVerdict": "This is a highly auspicious union. The stars align beautifully for a harmonious, prosperous, and blessed married life.",
+        "goodVerdict": "This match shows good potential. With understanding and minor remedies, a happy life together is very much possible.",
+        "challengingVerdict": "This match has significant astrological challenges. Strong remedies, counseling, and deep mutual commitment are essential.",
+        "noMajorDisadvantages": "No major astrological disadvantages found.",
+        "willingToWork": "Both individuals are willing to work on the relationship.",
+        "personalizedNote": "These are general suggestions. For personalized remedies based on your complete Kundali, please consult a qualified Tamil astrologer.",
+        "langToggle": "தமிழ்",
+        "factorVarna": "Varna", "factorVashya": "Vashya", "factorTara": "Tara / Dina",
+        "factorYoni": "Yoni", "factorGraha": "Graha Maitri", "factorGana": "Gana",
+        "factorBhakoot": "Bhakoot", "factorNadi": "Nadi",
+        "varnaDesc": "Spiritual development and ego compatibility",
+        "vashyaDesc": "Mutual attraction and control in relationship",
+        "taraDesc": "Destiny and star compatibility (Dina)",
+        "yoniDesc": "Physical and sexual compatibility",
+        "grahaDesc": "Friendship between ruling planets",
+        "ganaDesc": "Temperament: Deva, Manushya, Rakshasa",
+        "bhakootDesc": "Relative Moon sign positions",
+        "nadiDesc": "Health and genetic compatibility",
+        "loadingText": "Calculating cosmic compatibility...",
+        "selectRequired": "Selection Required",
+        "selectBoth": "Please select both a male and female profile.",
+        "noMaleProfiles": "No male profiles. Add one first.",
+        "noFemaleProfiles": "No female profiles. Add one first.",
+    },
+    "ta": {
+        "appTitle": "திருமண பொருத்தம்", "appSubtitle": "தமிழ் ஜோதிட பொருத்தம்",
+        "welcomeTitle": "திருமண பொருத்தம்", "welcomeSub": "பழங்கால தமிழ் ஜோதிடத்தின் மூலம் உங்கள் வானிலை பொருத்தத்தைக் கண்டறியுங்கள். பஞ்சாங்கம் அடிப்படையில் ஜாதகங்களை உருவாக்கி, உங்கள் சரியான பொருத்தத்தைக் கண்டறியுங்கள்.",
+        "beginJourney": "பயணத்தைத் தொடங்குங்கள்", "learnMore": "மேலும் அறிய",
+        "profiles": "சுயவிவரங்கள்", "addProfile": "+ சுயவிவரம் சேர்க்க", "matchHistory": "பொருத்த வரலாறு",
+        "noProfiles": "சுயவிவரங்கள் இல்லை", "noProfilesDesc": "பொருத்தம் செய்ய முதல் சுயவிவரத்தைச் சேர்க்கவும்",
+        "noMatches": "இன்னும் பொருத்தங்கள் கணக்கிடப்படவில்லை", "startMatch": "புதிய பொருத்தம்",
+        "createProfile": "சுயவிவரம் உருவாக்கு", "createProfileSub": "ஜாதகத்திற்கு பிறப்பு விவரங்களை உள்ளிடவும்",
+        "fullName": "முழு பெயர்", "gender": "பாலினம்", "selectGender": "பாலினத்தைத் தேர்ந்தெடுக்கவும்",
+        "male": "ஆண்", "female": "பெண்",
+        "dateOfBirth": "பிறந்த தேதி", "dobHint": "கிரிகோரியன் காலண்டர்படி தேதியை உள்ளிடவும்",
+        "timeOfBirth": "பிறந்த நேரம்", "timeHint": "உள்ளூர் நேரத்தை உள்ளிடவும் (24 மணி வடிவம் பரிந்துரைக்கப்படுகிறது)",
+        "birthPlace": "பிறந்த இடம் / நகரம்", "placeHint": "நேர மண்டல குறிப்புக்கு நகரப் பெயர்",
+        "latitude": "அகலாங்கு", "longitude": "நெடுங்கு",
+        "generateHoroscope": "ஜாதகம் உருவாக்கு", "horoscope": "ஜாதகம்",
+        "birthDetails": "பிறப்பு விவரங்கள்", "panchagamDetails": "பஞ்சாங்க விவரங்கள்",
+        "dashaTiming": "தசா & காலம்",
+        "dashaText": "உங்கள் பிறப்பு நட்சத்திரமான {nakshatra} அடிப்படையில், உங்கள் விம்சோத்தரி தசா வரிசை {lord} மகாதசாவுடன் தொடங்குகிறது. தற்போதைய கிரக காலம் உங்கள் வாழ்க்கைப் பாதை, தொழில், உறவுகள் மற்றும் ஆரோக்கியத்தைப் பாதிக்கிறது. விரிவான தசா-புக்தி பகுப்பாய்வுக்கு, ஒரு தொழில்முறை ஜோதிடரை அணுகவும்.",
+        "backToProfiles": "சுயவிவரங்களுக்குத் திரும்பு",
+        "selectPair": "ஜோடியைத் தேர்ந்தெடு", "selectPairSub": "பொருத்தம் செய்ய இரண்டு சுயவிவரங்களைத் தேர்ந்தெடுக்கவும்",
+        "person1": "நபர் 1 (மணமகன் / ஆண்)", "person2": "நபர் 2 (மணமகள் / பெண்)",
+        "calculate": "பொருத்தத்தைக் கணக்கிடு", "compatibility": "பொருத்தம்",
+        "compatibilityFactors": "பொருத்த காரணிகள்", "advantages": "நன்மைகள்",
+        "disadvantages": "தீமைகள்", "remedies": "பரிந்துரைக்கப்பட்ட பரிகாரங்கள்",
+        "vedicRemedies": "வேத பரிகாரங்கள்", "shareResult": "முடிவைப் பகிர்",
+        "copy": "நகலெடு", "print": "அச்சிடு", "home": "முகப்பு", "matchAnother": "மற்றொரு ஜோடியைப் பொருத்து",
+        "aboutTitle": "அஷ்டகூட பொருத்தம் பற்றி",
+        "aboutDesc": "அஷ்டகூடம் (Ashtakoota) திருமணப் பொருத்தத்திற்கு தமிழ்/வேத ஜோதிடத்தில் பயன்படுத்தப்படும் பாரம்பரிய 8-காரணி பொருத்த முறையாகும். ஒவ்வொரு காரணியும் பொருத்தத்தின் வெவ்வேறு பரிமாணத்தை மதிப்பிடுகிறது:",
+        "scoreInterpretation": "மதிப்பெண் விளக்கம்",
+        "excellent": "சிறந்த பொருத்தம்", "excellentRange": "28-36 / 78-100", "excellentDesc": "மிகவும் பரிந்துரைக்கப்படும் பொருத்தம்",
+        "good": "நல்ல பொருத்தம்", "goodRange": "18-27 / 50-77", "goodDesc": "சிறிய பரிகாரங்களுடன் ஏற்றுக்கொள்ளக்கூடியது",
+        "challenging": "சவாலான பொருத்தம்", "challengingRange": "0-17 / 0-49", "challengingDesc": "குறிப்பிடத்தக்க பரிகாரங்கள் தேவை",
+        "note": "குறிப்பு: இந்த பயன்பாடு செயல்பாட்டிற்காக எளிமைப்படுத்தப்பட்ட வானியல் கணக்கீடுகளைப் பயன்படுத்துகிறது. துல்லியமான பொருத்தத்திற்கு, முழு இஃபெமரிஸ் தரவுடன் ஒரு தொழில்முறை ஜோதிடரை அணுகவும்.",
+        "deleteProfile": "சுயவிவரத்தை நீக்கு", "deleteConfirm": "{name} ஐ நிச்சயமாக நீக்க விரும்புகிறீர்களா? இந்த செயலை மீட்டெடுக்க முடியாது.",
+        "cancel": "ரத்து செய்", "delete": "நீக்கு", "profileDeleted": "சுயவிவரம் நீக்கப்பட்டது",
+        "resultCopied": "முடிவு கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது!", "requiredFields": "தயவுசெய்து அனைத்து கட்டாய புலங்களையும் நிரப்பவும்",
+        "horoscopeGenerated": "ஜாதகம் வெற்றிகரமாக உருவாக்கப்பட்டது!",
+        "nakshatraAnalysis": "நட்சத்திர பகுப்பாய்வு", "nakshatraDesc": "27 நட்சத்திர அடிப்படையிலான பொருத்தம்",
+        "rasiMatching": "ராசி பொருத்தம்", "rasiDesc": "12 ராசி இணக்கம்",
+        "ashtakoota": "அஷ்டகூடம்", "ashtakootaDesc": "8-காரணி மதிப்பெண் முறை",
+        "panchagam": "பஞ்சாங்கம்", "panchagamDesc": "தமிழ் பஞ்சாங்கம் அடிப்படையில்",
+        "outOf100": "100-ல்", "ashtakootaScore": "அஷ்டகூட மதிப்பெண்",
+        "day": "நாள்", "nakshatra": "நட்சத்திரம்", "pada": "பாதம்", "rasi": "ராசி",
+        "rasiLord": "ராசி அதிபதி", "nakshatraLord": "நட்சத்திர அதிபதி", "gana": "கணம்",
+        "yoni": "யோனி", "nadi": "நாடி", "varna": "வர்ணம்", "vashya": "வசியம்",
+        "tithi": "திதி", "tamilMonth": "தமிழ் மாதம்", "tamilMonthLabel": "தமிழ் மாதம்",
+        "lord": "அதிபதி", "element": "தத்துவம்", "score": "மதிப்பெண்", "verdict": "தீர்ப்பு",
+        "excellentVerdict": "இது மிகவும் சுபமான கூட்டணி. ஒரு இணக்கமான, வளமான மற்றும் ஆசீர்வதிக்கப்பட்ட திருமண வாழ்க்கைக்கு நட்சத்திரங்கள் அழகாக பொருந்துகின்றன.",
+        "goodVerdict": "இந்த பொருத்தம் நல்ல சாத்தியத்தைக் காட்டுகிறது. புரிதலுடனும் சிறிய பரிகாரங்களுடனும், ஒன்றாக மகிழ்ச்சியான வாழ்க்கை மிகவும் சாத்தியமானது.",
+        "challengingVerdict": "இந்த பொருத்தத்தில் குறிப்பிடத்தக்க ஜோதிட சவால்கள் உள்ளன. வலுவான பரிகாரங்கள், ஆலோசனை மற்றும் ஆழமான பரஸ்பர உறுதிப்பாடு அவசியமானது.",
+        "noMajorDisadvantages": "குறிப்பிடத்தக்க ஜோதிட தீமைகள் எதுவும் காணப்படவில்லை.",
+        "willingToWork": "இருவரும் உறவில் வேலை செய்ய விரும்புகிறார்கள்.",
+        "personalizedNote": "இவை பொதுவான பரிந்துரைகள். உங்கள் முழு குண்டலியின் அடிப்படையில் தனிப்பயனாக்கப்பட்ட பரிகாரங்களுக்கு, தயவுசெய்து ஒரு தகுதியான தமிழ் ஜோதிடரை அணுகவும்.",
+        "langToggle": "English",
+        "factorVarna": "வர்ணம்", "factorVashya": "வசியம்", "factorTara": "தினம்",
+        "factorYoni": "யோனி", "factorGraha": "கிரக மைத்ரி", "factorGana": "கணம்",
+        "factorBhakoot": "பாகூட்", "factorNadi": "நாடி",
+        "varnaDesc": "ஆன்மீக வளர்ச்சி மற்றும் அகங்கார பொருத்தம்",
+        "vashyaDesc": "பரஸ்பர ஈர்ப்பு மற்றும் உறவில் கட்டுப்பாடு",
+        "taraDesc": "விதி மற்றும் நட்சத்திர பொருத்தம் (தினம்)",
+        "yoniDesc": "உடல் மற்றும் பாலியல் பொருத்தம்",
+        "grahaDesc": "ஆளும் கிரகங்களுக்கிடையே நட்பு",
+        "ganaDesc": "குணம்: தேவ, மனுஷ, ராட்சச",
+        "bhakootDesc": "சந்திர ராசி இடங்களின் தொடர்பு",
+        "nadiDesc": "ஆரோக்கியம் மற்றும் மரபணு பொருத்தம்",
+        "loadingText": "வானிலை பொருத்தத்தைக் கணக்கிடுகிறது...",
+        "selectRequired": "தேர்வு தேவை",
+        "selectBoth": "தயவுசெய்து ஒரு ஆண் மற்றும் பெண் சுயவிவரத்தைத் தேர்ந்தெடுக்கவும்.",
+        "noMaleProfiles": "ஆண் சுயவிவரங்கள் இல்லை. முதலில் ஒன்றைச் சேர்க்கவும்.",
+        "noFemaleProfiles": "பெண் சுயவிவரங்கள் இல்லை. முதலில் ஒன்றைச் சேர்க்கவும்.",
+    }
+};
+
+let currentLang = localStorage.getItem('tap_lang') || 'en';
+
+function t(key, vars) {
+    let text = TRANSLATIONS[currentLang]?.[key] || TRANSLATIONS['en'][key] || key;
+    if (vars) {
+        for (let k in vars) text = text.replace('{' + k + '}', vars[k]);
+    }
+    return text;
+}
+
+// XSS Protection: Escape HTML entities
+function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'ta' : 'en';
+    localStorage.setItem('tap_lang', currentLang);
+    updateStaticText();
+    // Re-render current screen
+    let currentScreen = screenStack[screenStack.length - 1];
+    if (currentScreen === 'home') renderHome();
+    if (currentScreen === 'matchSelect') renderMatchSelect();
+    if (currentScreen === 'horoscope') {
+        let p = profiles.find(x => x.id === currentProfileId);
+        if (p) renderHoroscope(p);
+    }
+    if (currentScreen === 'results') {
+        // Can't re-render results easily without stored result, so just update text
+        updateResultsLanguage();
+    }
+    if (currentScreen === 'about') renderAbout();
+}
+
+function updateStaticText() {
+    document.getElementById('langToggle').textContent = t('langToggle');
+    document.getElementById('headerTitle').textContent = t('appTitle');
+    document.getElementById('headerSub').textContent = t('appSubtitle');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        let key = el.getAttribute('data-i18n');
+        if (TRANSLATIONS[currentLang][key]) el.textContent = t(key);
+    });
+    // Update select options
+    let genderSelect = document.getElementById('pGender');
+    if (genderSelect) {
+        genderSelect.options[0].text = t('selectGender');
+        genderSelect.options[1].text = t('male');
+        genderSelect.options[2].text = t('female');
+    }
+}
+
+// ===================== ASTROLOGY ENGINE =====================
+
+const NAKSHATRAS = [
+    { name: "Ashwini", tamil: "அஸ்வினி", lord: "Ketu", symbol: "🐎", start: 0, end: 13.3333, pada: [0,3.3333,6.6667,10] },
+    { name: "Bharani", tamil: "பரணி", lord: "Venus", symbol: "⚖️", start: 13.3333, end: 26.6667, pada: [13.3333,16.6667,20,23.3333] },
+    { name: "Krittika", tamil: "கிருத்திகை", lord: "Sun", symbol: "🔥", start: 26.6667, end: 40, pada: [26.6667,30,33.3333,36.6667] },
+    { name: "Rohini", tamil: "ரோகிணி", lord: "Moon", symbol: "🌙", start: 40, end: 53.3333, pada: [40,43.3333,46.6667,50] },
+    { name: "Mrigashira", tamil: "மிருகசீரிஷம்", lord: "Mars", symbol: "🦌", start: 53.3333, end: 66.6667, pada: [53.3333,56.6667,60,63.3333] },
+    { name: "Ardra", tamil: "திருவாதிரை", lord: "Rahu", symbol: "💧", start: 66.6667, end: 80, pada: [66.6667,70,73.3333,76.6667] },
+    { name: "Punarvasu", tamil: "புனர்பூசம்", lord: "Jupiter", symbol: "🏹", start: 80, end: 93.3333, pada: [80,83.3333,86.6667,90] },
+    { name: "Pushya", tamil: "பூசம்", lord: "Saturn", symbol: "🌸", start: 93.3333, end: 106.6667, pada: [93.3333,96.6667,100,103.3333] },
+    { name: "Ashlesha", tamil: "ஆயில்யம்", lord: "Mercury", symbol: "🐍", start: 106.6667, end: 120, pada: [106.6667,110,113.3333,116.6667] },
+    { name: "Magha", tamil: "மகம்", lord: "Ketu", symbol: "👑", start: 120, end: 133.3333, pada: [120,123.3333,126.6667,130] },
+    { name: "Purva Phalguni", tamil: "பூரம்", lord: "Venus", symbol: "🛏️", start: 133.3333, end: 146.6667, pada: [133.3333,136.6667,140,143.3333] },
+    { name: "Uttara Phalguni", tamil: "உத்திரம்", lord: "Sun", symbol: "🐂", start: 146.6667, end: 160, pada: [146.6667,150,153.3333,156.6667] },
+    { name: "Hasta", tamil: "ஹஸ்தம்", lord: "Moon", symbol: "✋", start: 160, end: 173.3333, pada: [160,163.3333,166.6667,170] },
+    { name: "Chitra", tamil: "சித்திரை", lord: "Mars", symbol: "💎", start: 173.3333, end: 186.6667, pada: [173.3333,176.6667,180,183.3333] },
+    { name: "Swati", tamil: "சுவாதி", lord: "Rahu", symbol: "🌬️", start: 186.6667, end: 200, pada: [186.6667,190,193.3333,196.6667] },
+    { name: "Vishakha", tamil: "விசாகம்", lord: "Jupiter", symbol: "⚖️", start: 200, end: 213.3333, pada: [200,203.3333,206.6667,210] },
+    { name: "Anuradha", tamil: "அனுஷம்", lord: "Saturn", symbol: "🪷", start: 213.3333, end: 226.6667, pada: [213.3333,216.6667,220,223.3333] },
+    { name: "Jyeshtha", tamil: "கேட்டை", lord: "Mercury", symbol: "🦂", start: 226.6667, end: 240, pada: [226.6667,230,233.3333,236.6667] },
+    { name: "Mula", tamil: "மூலம்", lord: "Ketu", symbol: "🌿", start: 240, end: 253.3333, pada: [240,243.3333,246.6667,250] },
+    { name: "Purva Ashadha", tamil: "பூராடம்", lord: "Venus", symbol: "🐘", start: 253.3333, end: 266.6667, pada: [253.3333,256.6667,260,263.3333] },
+    { name: "Uttara Ashadha", tamil: "உத்திராடம்", lord: "Sun", symbol: "🦚", start: 266.6667, end: 280, pada: [266.6667,270,273.3333,276.6667] },
+    { name: "Shravana", tamil: "திருவோணம்", lord: "Moon", symbol: "👂", start: 280, end: 293.3333, pada: [280,283.3333,286.6667,290] },
+    { name: "Dhanishta", tamil: "அவிட்டம்", lord: "Mars", symbol: "🥁", start: 293.3333, end: 306.6667, pada: [293.3333,296.6667,300,303.3333] },
+    { name: "Shatabhisha", tamil: "சதயம்", lord: "Rahu", symbol: "💫", start: 306.6667, end: 320, pada: [306.6667,310,313.3333,316.6667] },
+    { name: "Purva Bhadrapada", tamil: "பூரட்டாதி", lord: "Jupiter", symbol: "🔱", start: 320, end: 333.3333, pada: [320,323.3333,326.6667,330] },
+    { name: "Uttara Bhadrapada", tamil: "உத்திரட்டாதி", lord: "Saturn", symbol: "🐢", start: 333.3333, end: 346.6667, pada: [333.3333,336.6667,340,343.3333] },
+    { name: "Revati", tamil: "ரேவதி", lord: "Mercury", symbol: "🐟", start: 346.6667, end: 360, pada: [346.6667,350,353.3333,356.6667] }
+];
+
+const RASIS = [
+    { name: "Aries", tamil: "மேஷம்", symbol: "♈", lord: "Mars", element: "Fire" },
+    { name: "Taurus", tamil: "ரிஷபம்", symbol: "♉", lord: "Venus", element: "Earth" },
+    { name: "Gemini", tamil: "மிதுனம்", symbol: "♊", lord: "Mercury", element: "Air" },
+    { name: "Cancer", tamil: "கடகம்", symbol: "♋", lord: "Moon", element: "Water" },
+    { name: "Leo", tamil: "சிம்மம்", symbol: "♌", lord: "Sun", element: "Fire" },
+    { name: "Virgo", tamil: "கன்னி", symbol: "♍", lord: "Mercury", element: "Earth" },
+    { name: "Libra", tamil: "துலாம்", symbol: "♎", lord: "Venus", element: "Air" },
+    { name: "Scorpio", tamil: "விருச்சிகம்", symbol: "♏", lord: "Mars", element: "Water" },
+    { name: "Sagittarius", tamil: "தனுசு", symbol: "♐", lord: "Jupiter", element: "Fire" },
+    { name: "Capricorn", tamil: "மகரம்", symbol: "♑", lord: "Saturn", element: "Earth" },
+    { name: "Aquarius", tamil: "கும்பம்", symbol: "♒", lord: "Saturn", element: "Air" },
+    { name: "Pisces", tamil: "மீனம்", symbol: "♓", lord: "Jupiter", element: "Water" }
+];
+
+const GANAS = ["Deva", "Manushya", "Rakshasa"];
+const GANA_TAMIL = { "Deva": "தேவ", "Manushya": "மனுஷ", "Rakshasa": "ராட்சச" };
+const YONIS = ["Horse","Elephant","Sheep","Snake","Dog","Cat","Rat","Cow","Buffalo","Tiger","Hare","Monkey","Mongoose","Lion"];
+const NADIS = ["Vata","Pitta","Kapha"];
+const NADI_TAMIL = { "Vata": "வாத", "Pitta": "பித்த", "Kapha": "கப" };
+const TARA_TYPES = ["Janma","Sampat","Vipat","Kshema","Pratyak","Sadhana","Naidhana","Mitra","Ati-Mitra"];
+
+const PLANET_FRIENDSHIP = {
+    "Sun": { friends: ["Moon","Mars","Jupiter"], enemies: ["Venus","Saturn"], neutral: ["Mercury"] },
+    "Moon": { friends: ["Sun","Mercury"], enemies: [], neutral: ["Mars","Jupiter","Venus","Saturn"] },
+    "Mars": { friends: ["Sun","Moon","Jupiter"], enemies: ["Mercury"], neutral: ["Venus","Saturn"] },
+    "Mercury": { friends: ["Sun","Venus"], enemies: ["Moon"], neutral: ["Mars","Jupiter","Saturn"] },
+    "Jupiter": { friends: ["Sun","Moon","Mars"], enemies: ["Mercury","Venus"], neutral: ["Saturn"] },
+    "Venus": { friends: ["Mercury","Saturn"], enemies: ["Sun","Moon"], neutral: ["Mars","Jupiter"] },
+    "Saturn": { friends: ["Mercury","Venus"], enemies: ["Sun","Moon","Mars"], neutral: ["Jupiter"] },
+    "Rahu": { friends: ["Venus","Saturn"], enemies: ["Sun","Moon","Mars"], neutral: ["Mercury","Jupiter"] },
+    "Ketu": { friends: ["Venus","Saturn"], enemies: ["Sun","Moon","Mars"], neutral: ["Mercury","Jupiter"] }
+};
+
+function getAyanamsa(year) { return 24.0 + (year - 2000) * 0.0139; }
+function getJulianDay(date) {
+    let y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+    if (m <= 2) { y -= 1; m += 12; }
+    let A = Math.floor(y / 100);
+    let B = 2 - A + Math.floor(A / 4);
+    return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + B - 1524.5;
+}
+function getMoonLongitude(jd) { let L = 218.316 + 13.176396 * (jd - 2451545.0); return ((L % 360) + 360) % 360; }
+function getSunLongitude(jd) { let n = jd - 2451545.0; let L = 280.460 + 0.9856474 * n; return ((L % 360) + 360) % 360; }
+
+function getNakshatra(siderealLon) {
+    let lon = ((siderealLon % 360) + 360) % 360;
+    for (let i = 0; i < NAKSHATRAS.length; i++) {
+        let n = NAKSHATRAS[i];
+        if (lon >= n.start && lon < n.end) {
+            let pada = 1;
+            for (let p = 0; p < 4; p++) { if (lon >= n.pada[p] && lon < (n.pada[p+1] || n.end)) { pada = p + 1; break; } }
+            return { ...n, index: i, pada: pada, longitude: lon };
+        }
+    }
+    return { ...NAKSHATRAS[0], index: 0, pada: 1, longitude: lon };
+}
+function getRasi(siderealLon) {
+    let lon = ((siderealLon % 360) + 360) % 360;
+    let rasiIndex = Math.floor(lon / 30);
+    return { ...RASIS[rasiIndex], index: rasiIndex, degree: lon % 30, longitude: lon };
+}
+function getGana(nakshatraIndex) {
+    const ganaMap = [0,1,2, 1,2,0, 1,2,0, 2,1,0, 1,2,0, 1,2,0, 2,1,0, 1,2,0, 1,2];
+    return GANAS[ganaMap[nakshatraIndex % 27]];
+}
+function getYoni(nakshatraIndex) {
+    const yoniMap = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,0,1,2,3,4,5,6,7,8,9,10,11,12];
+    return YONIS[yoniMap[nakshatraIndex % 27]];
+}
+function getNadi(nakshatraIndex) {
+    const nadiMap = [0,1,2, 0,1,2, 0,1,2, 1,2,0, 1,2,0, 1,2,0, 2,0,1, 2,0,1, 2,0,1];
+    return NADIS[nadiMap[nakshatraIndex % 27]];
+}
+function getVarna(rasiIndex) {
+    const varnaMap = ["Brahmin","Kshatriya","Vaishya","Shudra","Kshatriya","Vaishya","Shudra","Brahmin","Kshatriya","Vaishya","Shudra","Brahmin"];
+    return varnaMap[rasiIndex % 12];
+}
+function getVashya(rasiIndex) {
+    const vashyaMap = ["Manav","Vanchar","Chatushpad","Jalchar","Vanchar","Manav","Manav","Keet","Manav","Chatushpad","Jalchar","Chatushpad"];
+    return vashyaMap[rasiIndex % 12];
+}
+
+function generateHoroscope(name, dob, time, place, gender, lat, lng) {
+    let [year, month, day] = dob.split('-').map(Number);
+    let [hour, minute] = time.split(':').map(Number);
+    let birthDate = new Date(year, month - 1, day, hour, minute);
+    let jd = getJulianDay(birthDate);
+    let ayanamsa = getAyanamsa(year);
+    let moonTropical = getMoonLongitude(jd);
+    let sunTropical = getSunLongitude(jd);
+    let moonSidereal = ((moonTropical - ayanamsa) % 360 + 360) % 360;
+    let sunSidereal = ((sunTropical - ayanamsa) % 360 + 360) % 360;
+    let nakshatra = getNakshatra(moonSidereal);
+    let rasi = getRasi(moonSidereal);
+    let sunRasi = getRasi(sunSidereal);
+    let gana = getGana(nakshatra.index);
+    let yoni = getYoni(nakshatra.index);
+    let nadi = getNadi(nakshatra.index);
+    let varna = getVarna(rasi.index);
+    let vashya = getVashya(rasi.index);
+    let moonSunDiff = ((moonTropical - sunTropical) % 360 + 360) % 360;
+    let tithiNum = Math.floor(moonSunDiff / 12) + 1;
+    let tithiNames = ["Pratipada","Dwitiya","Tritiya","Chaturthi","Panchami","Shashthi","Saptami","Ashtami","Navami","Dashami","Ekadashi","Dwadashi","Trayodashi","Chaturdashi","Purnima/Amavasya"];
+    let tithiName = tithiNames[Math.min(tithiNum - 1, 14)];
+    let paksha = moonSunDiff < 180 ? "Shukla" : "Krishna";
+    const tamilDays = ["ஞாயிறு","திங்கள்","செவ்வாய்","புதன்","வியாழன்","வெள்ளி","சனி"];
+    let dayOfWeek = tamilDays[birthDate.getDay()];
+    const tamilMonths = ["சித்திரை","வைகாசி","ஆனி","ஆடி","ஆவணி","புரட்டாசி","ஐப்பசி","கார்த்திகை","மார்கழி","தை","மாசி","பங்குனி"];
+    let tamilMonthIndex = (month + 8) % 12;
+    let tamilMonth = tamilMonths[tamilMonthIndex];
+    return { name, dob, time, place, gender, lat, lng, birthDate: birthDate.toISOString(), moonLongitude: moonSidereal, sunLongitude: sunSidereal, nakshatra, rasi, sunRasi, gana, yoni, nadi, varna, vashya, tithi: { number: tithiNum, name: tithiName, paksha }, dayOfWeek, tamilMonth, lord: nakshatra.lord, pada: nakshatra.pada };
+}
+
+// Helper to get display name based on language
+function displayName(obj) { return currentLang === 'ta' && obj.tamil ? obj.tamil : obj.name; }
+function displayGana(g) { return currentLang === 'ta' ? GANA_TAMIL[g] || g : g; }
+function displayNadi(n) { return currentLang === 'ta' ? NADI_TAMIL[n] || n : n; }
+
+// ===================== ASHTAKOOTA MATCHING =====================
+
+function calculateVarna(maleRasi, femaleRasi) {
+    const varnaOrder = { "Brahmin": 4, "Kshatriya": 3, "Vaishya": 2, "Shudra": 1 };
+    let mVarna = getVarna(maleRasi.index);
+    let fVarna = getVarna(femaleRasi.index);
+    let score = varnaOrder[fVarna] >= varnaOrder[mVarna] ? 1 : 0;
+    let desc = score ? (currentLang === 'ta' ? "பெண்ணின் ஆன்மீக நிலை சமமான அல்லது உயர்ந்தது — நல்லது." : "Female's spiritual level is equal or higher — Good.") : (currentLang === 'ta' ? "பெண்ணின் ஆன்மீக நிலை குறைவு — கவனம் தேவை." : "Female's spiritual level is lower — Needs attention.");
+    return { key: "factorVarna", name: t("factorVarna"), score, maxScore: 1, desc: (currentLang === 'ta' ? `ஆண்: ${mVarna}, பெண்: ${fVarna}. ` : `Male: ${mVarna}, Female: ${fVarna}. `) + desc, maleValue: mVarna, femaleValue: fVarna };
+}
+
+function calculateVashya(maleRasi, femaleRasi) {
+    let mVashya = getVashya(maleRasi.index);
+    let fVashya = getVashya(femaleRasi.index);
+    let score = (mVashya === fVashya) ? 2 : 0;
+    let compatiblePairs = [["Manav","Manav"],["Manav","Jalchar"],["Chatushpad","Chatushpad"],["Jalchar","Jalchar"],["Vanchar","Vanchar"],["Keet","Keet"]];
+    for (let pair of compatiblePairs) { if ((mVashya === pair[0] && fVashya === pair[1]) || (mVashya === pair[1] && fVashya === pair[0])) { score = 2; break; } }
+    let desc = score === 2 ? (currentLang === 'ta' ? "பொருந்த வசிய வகைகள் — வலுவான பரஸ்பர ஈர்ப்பு." : "Compatible vashya types — Strong mutual attraction.") : (currentLang === 'ta' ? "வேறுபட்ட வசிய வகைகள் — புரிதல் தேவை." : "Different vashya types — May need understanding.");
+    return { key: "factorVashya", name: t("factorVashya"), score, maxScore: 2, desc: (currentLang === 'ta' ? `ஆண்: ${mVashya}, பெண்: ${fVashya}. ` : `Male: ${mVashya}, Female: ${fVashya}. `) + desc, maleValue: mVashya, femaleValue: fVashya };
+}
+
+function calculateTara(maleNak, femaleNak) {
+    let diff = ((femaleNak.index - maleNak.index) % 27 + 27) % 27;
+    let taraIndex = diff % 9;
+    let taraName = TARA_TYPES[taraIndex];
+    let goodTaras = [1, 3, 5, 7];
+    let score = goodTaras.includes(taraIndex) ? 3 : 0;
+    if (taraIndex === 0) score = 1.5;
+    let desc = score >= 3 ? (currentLang === 'ta' ? "சுபமான தாரா — சாதகமான விதி." : "Auspicious Tara — Favorable destiny.") : score > 0 ? (currentLang === 'ta' ? "நடுநிலை தாரா." : "Neutral Tara.") : (currentLang === 'ta' ? "அசுபமான தாரா — தடைகள் ஏற்படலாம்." : "Inauspicious Tara — May face obstacles.");
+    return { key: "factorTara", name: t("factorTara"), score, maxScore: 3, desc: (currentLang === 'ta' ? `ஆணிலிருந்து பெண்ணுக்கு தாரா: ${taraName} (${diff+1}-வது நட்சத்திரம்). ` : `Tara from male to female: ${taraName} (${diff+1}th star). `) + desc, maleValue: displayName(maleNak), femaleValue: displayName(femaleNak), taraName };
+}
+
+function calculateYoni(maleNak, femaleNak) {
+    let mYoni = getYoni(maleNak.index);
+    let fYoni = getYoni(femaleNak.index);
+    let friendlyYonis = { "Horse": ["Horse","Monkey","Sheep"], "Elephant": ["Elephant","Sheep","Cow"], "Sheep": ["Sheep","Elephant","Horse","Monkey"], "Snake": ["Snake","Mongoose"], "Dog": ["Dog","Mongoose","Deer"], "Cat": ["Cat","Mongoose","Hare"], "Rat": ["Rat","Snake","Mongoose"], "Cow": ["Cow","Elephant","Buffalo"], "Buffalo": ["Buffalo","Cow","Tiger"], "Tiger": ["Tiger","Buffalo","Hare"], "Hare": ["Hare","Tiger","Cat","Mongoose"], "Monkey": ["Monkey","Horse","Sheep"], "Mongoose": ["Mongoose","Snake","Dog","Cat","Hare","Rat"], "Lion": ["Lion","Tiger","Hare"] };
+    let score = 0;
+    if (mYoni === fYoni) score = 4;
+    else if (friendlyYonis[mYoni] && friendlyYonis[mYoni].includes(fYoni)) score = 3;
+    else if (friendlyYonis[fYoni] && friendlyYonis[fYoni].includes(mYoni)) score = 3;
+    else score = 1;
+    let desc = score >= 3 ? (currentLang === 'ta' ? "நட்பு யோனி விலங்குகள் — நல்ல உடல் பொருத்தம்." : "Friendly yoni animals — Good physical compatibility.") : (currentLang === 'ta' ? "வேறுபட்ட யோனி இயல்புகள் — சரிசெய்தல் தேவை." : "Different yoni natures — May need adjustment.");
+    return { key: "factorYoni", name: t("factorYoni"), score, maxScore: 4, desc: (currentLang === 'ta' ? `ஆண் யோனி: ${mYoni}, பெண் யோனி: ${fYoni}. ` : `Male Yoni: ${mYoni}, Female Yoni: ${fYoni}. `) + desc, maleValue: mYoni, femaleValue: fYoni };
+}
+
+function calculateGrahaMaitri(maleNak, femaleNak) {
+    let mLord = maleNak.lord;
+    let fLord = femaleNak.lord;
+    let mData = PLANET_FRIENDSHIP[mLord] || { friends: [], enemies: [], neutral: [] };
+    let score = 0;
+    if (mData.friends.includes(fLord)) score = 5;
+    else if (mData.neutral.includes(fLord)) score = 4;
+    else if (mData.enemies.includes(fLord)) score = 0;
+    else score = 3;
+    let desc = score >= 4 ? (currentLang === 'ta' ? "கிரகங்கள் நட்பு — சிறந்த மனநிலை ஒற்றுமை." : "Planets are friendly — Excellent mental harmony.") : score > 0 ? (currentLang === 'ta' ? "நடுநிலை கிரக உறவு." : "Neutral planetary relationship.") : (currentLang === 'ta' ? "கிரகங்கள் பகை — மோதல்கள் ஏற்படலாம்." : "Planets are enemies — May have conflicts.");
+    return { key: "factorGraha", name: t("factorGraha"), score, maxScore: 5, desc: (currentLang === 'ta' ? `ஆண் அதிபதி: ${mLord}, பெண் அதிபதி: ${fLord}. ` : `Male Lord: ${mLord}, Female Lord: ${fLord}. `) + desc, maleValue: mLord, femaleValue: fLord };
+}
+
+function calculateGana(maleNak, femaleNak) {
+    let mGana = getGana(maleNak.index);
+    let fGana = getGana(femaleNak.index);
+    let score = 0;
+    if (mGana === fGana) score = 6;
+    else if (mGana === "Deva" && fGana === "Manushya") score = 5;
+    else if (mGana === "Manushya" && fGana === "Deva") score = 5;
+    else if (mGana === "Manushya" && fGana === "Rakshasa") score = 3;
+    else if (mGana === "Rakshasa" && fGana === "Manushya") score = 3;
+    else if (mGana === "Deva" && fGana === "Rakshasa") score = 1;
+    else if (mGana === "Rakshasa" && fGana === "Deva") score = 1;
+    let desc = score >= 5 ? (currentLang === 'ta' ? "பொருந்த குணம் — இணக்கமான வாழ்க்கை." : "Matching temperament — Harmonious life.") : score >= 3 ? (currentLang === 'ta' ? "வேறுபட்ட ஆனால் சமாளிக்கக்கூடிய குணம்." : "Different but manageable temperament.") : (currentLang === 'ta' ? "மிகவும் வேறுபட்ட குணங்கள் — பொறுமை தேவை." : "Very different temperaments — Needs patience.");
+    return { key: "factorGana", name: t("factorGana"), score, maxScore: 6, desc: (currentLang === 'ta' ? `ஆண்: ${displayGana(mGana)}, பெண்: ${displayGana(fGana)}. ` : `Male: ${mGana}, Female: ${fGana}. `) + desc, maleValue: mGana, femaleValue: fGana };
+}
+
+function calculateBhakoot(maleRasi, femaleRasi) {
+    let mIdx = maleRasi.index;
+    let fIdx = femaleRasi.index;
+    let diff = ((fIdx - mIdx) % 12 + 12) % 12;
+    let badDiffs = [1, 2, 4, 6, 8, 9, 10, 12];
+    let score = badDiffs.includes(diff) ? 0 : 7;
+    if (diff === 1 && [0,3,6,9].includes(mIdx)) score = 7;
+    if (diff === 3 && [1,4,7,10].includes(mIdx)) score = 7;
+    if (diff === 4 && [2,5,8,11].includes(mIdx)) score = 7;
+    let desc = score === 7 ? (currentLang === 'ta' ? "சாதகமான இடங்கள் — செல்வமும் குழந்தைகளும்." : "Favorable relative positions — Prosperity and children.") : (currentLang === 'ta' ? "அசாதகமான இடங்கள் — கடினங்கள் ஏற்படலாம். பரிகாரங்கள் பரிந்துரைக்கப்படுகின்றன." : "Unfavorable relative positions — May face hardships. Remedies recommended.");
+    return { key: "factorBhakoot", name: t("factorBhakoot"), score, maxScore: 7, desc: (currentLang === 'ta' ? `சந்திர ராசி வித்தியாசம்: ${diff} ராசிகள். ` : `Moon sign difference: ${diff} signs. `) + desc, maleValue: displayName(maleRasi), femaleValue: displayName(femaleRasi) };
+}
+
+function calculateNadi(maleNak, femaleNak) {
+    let mNadi = getNadi(maleNak.index);
+    let fNadi = getNadi(femaleNak.index);
+    let score = (mNadi === fNadi) ? 0 : 8;
+    let desc = score === 8 ? (currentLang === 'ta' ? "வேறுபட்ட நாடிகள் — சிறந்த ஆரோக்கியமும் மரபணு பொருத்தமும்." : "Different Nadis — Excellent health and genetic compatibility.") : (currentLang === 'ta' ? "ஒரே நாடி — ஆரோக்கிய/மரபணு கவலைகள் சாத்தியமானவை. மருத்துவ ஆலோசனை பரிந்துரைக்கப்படுகிறது." : "Same Nadi — Potential health/genetic concerns. Medical consultation advised.");
+    return { key: "factorNadi", name: t("factorNadi"), score, maxScore: 8, desc: (currentLang === 'ta' ? `ஆண் நாடி: ${displayNadi(mNadi)}, பெண் நாடி: ${displayNadi(fNadi)}. ` : `Male Nadi: ${mNadi}, Female Nadi: ${fNadi}. `) + desc, maleValue: mNadi, femaleValue: fNadi };
+}
+
+function performAshtakoota(maleHoro, femaleHoro) {
+    let factors = [
+        calculateVarna(maleHoro.rasi, femaleHoro.rasi),
+        calculateVashya(maleHoro.rasi, femaleHoro.rasi),
+        calculateTara(maleHoro.nakshatra, femaleHoro.nakshatra),
+        calculateYoni(maleHoro.nakshatra, femaleHoro.nakshatra),
+        calculateGrahaMaitri(maleHoro.nakshatra, femaleHoro.nakshatra),
+        calculateGana(maleHoro.nakshatra, femaleHoro.nakshatra),
+        calculateBhakoot(maleHoro.rasi, femaleHoro.rasi),
+        calculateNadi(maleHoro.nakshatra, femaleHoro.nakshatra)
+    ];
+    let totalScore = factors.reduce((sum, f) => sum + f.score, 0);
+    let maxScore = factors.reduce((sum, f) => sum + f.maxScore, 0);
+    let percentage = Math.round((totalScore / maxScore) * 100);
+    let verdict, verdictClass, verdictDesc;
+    if (totalScore >= 28) { verdict = t("excellent"); verdictClass = "success"; verdictDesc = t("excellentVerdict"); }
+    else if (totalScore >= 18) { verdict = t("good"); verdictClass = "warning"; verdictDesc = t("goodVerdict"); }
+    else { verdict = t("challenging"); verdictClass = "danger"; verdictDesc = t("challengingVerdict"); }
+    let advantages = [];
+    let disadvantages = [];
+    factors.forEach(f => {
+        if (f.score >= f.maxScore * 0.75) advantages.push(`${f.name}: ${f.desc.split('.')[0]}.`);
+        else if (f.score <= f.maxScore * 0.25) disadvantages.push(`${f.name}: ${f.desc.split('.')[0]}.`);
+    });
+    if (advantages.length === 0) advantages.push(t("willingToWork"));
+    if (disadvantages.length === 0) disadvantages.push(t("noMajorDisadvantages"));
+    let remedies = [];
+    if (factors[7].score === 0) remedies.push(currentLang === 'ta' ? "நாடி தோஷ நிவாரண பூஜை செய்யவும். ஆரோக்கிய தொண்டு நிறுவனங்களுக்கு நன்கொடை அளிக்கவும்." : "Perform Nadi Dosha Nivarana Puja. Donate to health charities.");
+    if (factors[6].score === 0) remedies.push(currentLang === 'ta' ? "பாகூட் தோஷ பரிகாரங்களைச் செய்யவும். மஹாமிருத்துஞ்சய மந்திரத்தை ஜெபிக்கவும்." : "Perform Bhakoot Dosha remedies. Chant Mahamrityunjaya Mantra.");
+    if (factors[5].score <= 3) remedies.push(currentLang === 'ta' ? "பொறுமையையும் பரஸ்பர மரியாதையையும் பழக்கவும். கண தோஷ பூஜையைக் கருத்தில்கொள்ளவும்." : "Practice patience and mutual respect. Consider Gana Dosha Puja.");
+    if (factors[4].score <= 2) remedies.push(currentLang === 'ta' ? "மந்திரங்கள் மற்றும் தொண்டு மூலம் குருவை வலுப்படுத்தவும்." : "Strengthen Jupiter through mantras and charity.");
+    if (factors[3].score <= 2) remedies.push(currentLang === 'ta' ? "பகிர்ந்த ஆன்மீக பழக்கங்கள் மூலம் உணர்வுபூர்வமான நெருக்கத்தைக் கட்டமைக்கவும்." : "Build emotional intimacy through shared spiritual practices.");
+    if (remedies.length === 0) {
+        remedies.push(currentLang === 'ta' ? "திருமண பேறுக்கு லக்ஷ்மி நாராயண மந்திரத்தை ஜெபிக்கவும்." : "Chant Lakshmi Narayana Mantra for marital bliss.");
+        remedies.push(currentLang === 'ta' ? "வெள்ளிக்கிழமைகளில் பகிர்ந்து பூஜை செய்யவும்." : "Perform regular puja together on Fridays.");
+        remedies.push(currentLang === 'ta' ? "சுப நாட்களில் கோயில்களுக்குச் செல்லவும்." : "Visit temples on auspicious days.");
+    }
+    return { factors, totalScore, maxScore, percentage, verdict, verdictClass, verdictDesc, advantages, disadvantages, remedies, male: maleHoro, female: femaleHoro };
+}
+
+// ===================== APP STATE & UI =====================
+
+let profiles = JSON.parse(localStorage.getItem('tap_profiles') || '[]');
+let history = JSON.parse(localStorage.getItem('tap_history') || '[]');
+let screenStack = ['welcome'];
+let selectedPerson1 = null;
+let selectedPerson2 = null;
+let deleteTargetId = null;
+let currentProfileId = null;
+let lastResult = null;
+
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + screenId).classList.add('active');
+    if (screenId !== screenStack[screenStack.length - 1]) screenStack.push(screenId);
+    updateHeader();
+    if (screenId === 'home') renderHome();
+    if (screenId === 'matchSelect') {
+        // Reset selections only when first entering match screen
+        selectedPerson1 = null;
+        selectedPerson2 = null;
+        renderMatchSelect();
+    }
+    if (screenId === 'about') renderAbout();
+    window.scrollTo(0, 0);
+}
+
+function goBack() {
+    if (screenStack.length > 1) {
+        screenStack.pop();
+        let prev = screenStack[screenStack.length - 1];
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-' + prev).classList.add('active');
+        updateHeader();
+        if (prev === 'home') renderHome();
+        if (prev === 'matchSelect') {
+            selectedPerson1 = null;
+            selectedPerson2 = null;
+            renderMatchSelect();
+        }
+    }
+}
+
+function updateHeader() {
+    let current = screenStack[screenStack.length - 1];
+    document.getElementById('backBtn').style.display = current === 'welcome' ? 'none' : 'flex';
+}
+
+function showToast(msg) {
+    let t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+function openDeleteModal(id, name) {
+    deleteTargetId = id;
+    document.getElementById('deleteName').textContent = name;
+    document.getElementById('deleteConfirmText').innerHTML = t('deleteConfirm', {name: '<strong>' + name + '</strong>'});
+    document.getElementById('deleteModal').classList.add('active');
+}
+
+document.getElementById('confirmDeleteBtn').onclick = function() {
+    if (deleteTargetId) {
+        profiles = profiles.filter(p => p.id !== deleteTargetId);
+        localStorage.setItem('tap_profiles', JSON.stringify(profiles));
+        renderHome();
+        showToast(t('profileDeleted'));
+        closeModal('deleteModal');
+        deleteTargetId = null;
+    }
+};
+
+function saveProfile(e) {
+    e.preventDefault();
+    let name = document.getElementById('pName').value.trim();
+    let gender = document.getElementById('pGender').value;
+    let dob = document.getElementById('pDob').value;
+    let time = document.getElementById('pTime').value;
+    let place = document.getElementById('pPlace').value.trim();
+    let lat = parseFloat(document.getElementById('pLat').value) || 13.08;
+    let lng = parseFloat(document.getElementById('pLng').value) || 80.27;
+    if (!name || !gender || !dob || !time || !place) {
+        showToast(t('requiredFields'));
+        return;
+    }
+    let horoscope = generateHoroscope(name, dob, time, place, gender, lat, lng);
+    let profile = { id: Date.now().toString(), name, gender, dob, time, place, lat, lng, horoscope, createdAt: new Date().toISOString() };
+    profiles.push(profile);
+    localStorage.setItem('tap_profiles', JSON.stringify(profiles));
+    document.getElementById('profileForm').reset();
+    showToast(t('horoscopeGenerated'));
+    showScreen('horoscope');
+    renderHoroscope(profile);
+}
+
+function renderHome() {
+    let list = document.getElementById('profilesList');
+    let historyList = document.getElementById('historyList');
+    let actionArea = document.getElementById('matchActionArea');
+    if (profiles.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon">👤</div><div class="empty-title">${t('noProfiles')}</div><p>${t('noProfilesDesc')}</p></div>`;
+        actionArea.style.display = 'none';
+    } else {
+        list.innerHTML = profiles.map(p => {
+            let h = p.horoscope;
+            let safeName = escapeHtml(p.name);
+            let safePlace = escapeHtml(p.place);
+            return `<div class="profile-card" onclick="viewProfile('${p.id}')">
+                <div class="profile-header">
+                    <div class="profile-avatar">${safeName.charAt(0).toUpperCase()}</div>
+                    <div class="profile-info">
+                        <h3>${safeName}</h3>
+                        <p>${p.gender === 'male' ? '♂' : '♀'} ${new Date(p.dob).toLocaleDateString()} • ${safePlace}</p>
+                    </div>
+                </div>
+                <div class="profile-badges">
+                    <span class="badge badge-nakshatra">${displayName(h.nakshatra)}</span>
+                    <span class="badge badge-rasi">${displayName(h.rasi)}</span>
+                    <span class="badge">${t('pada')} ${h.pada}</span>
+                    <span class="badge">${displayGana(h.gana)}</span>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:10px;">
+                    <button class="btn btn-sm btn-outline" style="flex:1;" onclick="event.stopPropagation();viewProfile('${p.id}')">${t('horoscope')}</button>
+                    <button class="btn btn-sm btn-danger" style="flex:1;" onclick="event.stopPropagation();openDeleteModal('${p.id}','${safeName}')">${t('delete')}</button>
+                </div>
+            </div>`;
+        }).join('');
+        actionArea.style.display = profiles.length >= 2 ? 'block' : 'none';
+    }
+    if (history.length === 0) {
+        historyList.innerHTML = `<div class="empty-state" style="padding:20px;"><p style="font-size:0.85rem;">${t('noMatches')}</p></div>`;
+    } else {
+        historyList.innerHTML = history.slice().reverse().slice(0, 10).map(h => {
+            let color = h.percentage >= 78 ? 'var(--success)' : h.percentage >= 50 ? 'var(--warning)' : 'var(--danger)';
+            let safeMale = escapeHtml(h.maleName);
+            let safeFemale = escapeHtml(h.femaleName);
+            return `<div class="history-item" onclick="viewHistoryMatch('${h.id}')" style="cursor:pointer;">
+                <div><div class="history-names">${safeMale} ❤️ ${safeFemale}</div><div class="history-date">${new Date(h.date).toLocaleDateString()}</div></div>
+                <div class="history-score" style="color:${color}">${h.percentage}%</div>
+            </div>`;
+        }).join('');
+    }
+}
+
+function viewProfile(id) {
+    let p = profiles.find(x => x.id === id);
+    if (p) { currentProfileId = id; showScreen('horoscope'); renderHoroscope(p); }
+}
+
+function renderHoroscope(profile) {
+    let h = profile.horoscope;
+    let container = document.getElementById('horoscopeContent');
+    let safeProfileName = escapeHtml(profile.name);
+        container.innerHTML = `
+        <div class="card animate-fade">
+            <div class="match-pair" style="margin-bottom:0;">
+                <div class="match-person">
+                    <div class="match-person-avatar">${safeProfileName.charAt(0).toUpperCase()}</div>
+                    <div class="match-person-name">${safeProfileName}</div>
+                    <div class="match-person-detail">${profile.gender === 'male' ? '♂ ' + t('male') : '♀ ' + t('female')}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.1s">
+            <div class="section-title">🌙 ${t('birthDetails')}</div>
+            <div class="horo-grid">
+                <div class="horo-item"><div class="horo-item-label">${t('dateOfBirth')}</div><div class="horo-item-value">${new Date(profile.dob).toLocaleDateString()}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('timeOfBirth')}</div><div class="horo-item-value">${profile.time}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('birthPlace')}</div><div class="horo-item-value">${profile.place}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('day')}</div><div class="horo-item-value">${h.dayOfWeek}</div></div>
+            </div>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.2s">
+            <div class="section-title">⭐ ${t('panchagamDetails')}</div>
+            <div class="horo-grid">
+                <div class="horo-item"><div class="horo-item-label">${t('nakshatra')}</div><div class="horo-item-value">${displayName(h.nakshatra)}</div><div class="horo-item-tamil">${h.nakshatra.tamil}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('pada')}</div><div class="horo-item-value">${h.pada}</div><div class="horo-item-tamil">${h.pada}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('rasi')}</div><div class="horo-item-value">${displayName(h.rasi)}</div><div class="horo-item-tamil">${h.rasi.tamil}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('rasiLord')}</div><div class="horo-item-value">${h.rasi.lord}</div><div class="horo-item-tamil">${h.rasi.element}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('nakshatraLord')}</div><div class="horo-item-value">${h.lord}</div><div class="horo-item-tamil">${t('lord')}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('gana')}</div><div class="horo-item-value">${displayGana(h.gana)}</div><div class="horo-item-tamil">${h.gana}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('yoni')}</div><div class="horo-item-value">${h.yoni}</div><div class="horo-item-tamil">${t('yoni')}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('nadi')}</div><div class="horo-item-value">${displayNadi(h.nadi)}</div><div class="horo-item-tamil">${h.nadi}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('varna')}</div><div class="horo-item-value">${h.varna}</div><div class="horo-item-tamil">${t('varna')}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('vashya')}</div><div class="horo-item-value">${h.vashya}</div><div class="horo-item-tamil">${t('vashya')}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('tithi')}</div><div class="horo-item-value">${h.tithi.name}</div><div class="horo-item-tamil">${h.tithi.paksha}</div></div>
+                <div class="horo-item"><div class="horo-item-label">${t('tamilMonthLabel')}</div><div class="horo-item-value">${h.tamilMonth}</div><div class="horo-item-tamil">${t('tamilMonth')}</div></div>
+            </div>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.3s">
+            <div class="section-title">☸ ${t('dashaTiming')}</div>
+            <p style="font-size:0.85rem;color:var(--text-light);line-height:1.7;">${t('dashaText', {nakshatra: displayName(h.nakshatra), lord: h.lord})}</p>
+        </div>
+    `;
+}
+
+function renderMatchSelect() {
+    let males = profiles.filter(p => p.gender === 'male');
+    let females = profiles.filter(p => p.gender === 'female');
+    let renderSelection = (people, containerId, selectedId, selectFn) => {
+        let container = document.getElementById(containerId);
+        if (people.length === 0) {
+            container.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-light);font-size:0.85rem;">${containerId.includes('1') ? t('noMaleProfiles') : t('noFemaleProfiles')}</div>`;
+            return;
+        }
+        container.innerHTML = people.map(p => {
+            let isSelected = selectedId === p.id;
+            let safePName = escapeHtml(p.name);
+            return `<div class="selection-card ${isSelected?'selected':''}" onclick="${selectFn}('${p.id}')">
+                <div class="selection-check">${isSelected?'✓':''}</div>
+                <div class="selection-info">
+                    <h4>${safePName}</h4>
+                    <p>${displayName(p.horoscope.nakshatra)} • ${displayName(p.horoscope.rasi)} • ${new Date(p.dob).toLocaleDateString()}</p>
+                </div>
+            </div>`;
+        }).join('');
+    };
+    renderSelection(males, 'selectPerson1', selectedPerson1, 'selectPerson1Fn');
+    renderSelection(females, 'selectPerson2', selectedPerson2, 'selectPerson2Fn');
+    let matchBtn = document.getElementById('matchBtn');
+    matchBtn.disabled = !(selectedPerson1 && selectedPerson2);
+    matchBtn.style.opacity = (selectedPerson1 && selectedPerson2) ? '1' : '0.5';
+}
+
+function selectPerson1Fn(id) { selectedPerson1 = selectedPerson1 === id ? null : id; renderMatchSelect(); }
+function selectPerson2Fn(id) { selectedPerson2 = selectedPerson2 === id ? null : id; renderMatchSelect(); }
+
+function performMatch() {
+    if (!selectedPerson1 || !selectedPerson2) return;
+    let male = profiles.find(p => p.id === selectedPerson1);
+    let female = profiles.find(p => p.id === selectedPerson2);
+    if (!male || !female) return;
+    showScreen('results');
+    let container = document.getElementById('resultsContent');
+    container.innerHTML = `<div class="loading"><div class="loading-spinner"></div><div class="loading-text">${t('loadingText')}</div></div>`;
+    setTimeout(() => {
+        let result = performAshtakoota(male.horoscope, female.horoscope);
+        lastResult = result;
+        let historyEntry = { id: Date.now().toString(), maleId: male.id, femaleId: female.id, maleName: male.name, femaleName: female.name, totalScore: result.totalScore, maxScore: result.maxScore, percentage: result.percentage, verdict: result.verdict, date: new Date().toISOString() };
+        history.push(historyEntry);
+        localStorage.setItem('tap_history', JSON.stringify(history));
+        renderResults(result, male, female);
+    }, 1500);
+}
+
+function renderResults(result, male, female) {
+    let container = document.getElementById('resultsContent');
+    let scoreColor = result.percentage >= 78 ? 'var(--success)' : result.percentage >= 50 ? 'var(--warning)' : 'var(--danger)';
+    let safeMName = escapeHtml(male.name);
+        let safeFName = escapeHtml(female.name);
+        container.innerHTML = `
+        <div class="match-pair animate-fade">
+            <div class="match-person">
+                <div class="match-person-avatar">${safeMName.charAt(0).toUpperCase()}</div>
+                <div class="match-person-name">${safeMName}</div>
+                <div class="match-person-detail">${displayName(male.horoscope.nakshatra)} • ${displayName(male.horoscope.rasi)}</div>
+            </div>
+            <div class="match-heart">💕</div>
+            <div class="match-person">
+                <div class="match-person-avatar">${safeFName.charAt(0).toUpperCase()}</div>
+                <div class="match-person-name">${safeFName}</div>
+                <div class="match-person-detail">${displayName(female.horoscope.nakshatra)} • ${displayName(female.horoscope.rasi)}</div>
+            </div>
+        </div>
+        <div class="score-container animate-scale" style="--score:${result.percentage}">
+            <div class="score-circle">
+                <div class="score-circle-inner">
+                    <div class="score-value">${result.percentage}</div>
+                    <div class="score-label">${t('outOf100')}</div>
+                </div>
+            </div>
+            <div class="score-verdict">${result.verdict}</div>
+            <div class="score-sub">${t('ashtakootaScore')}: ${result.totalScore} / ${result.maxScore}</div>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.2s">
+            <div class="section-title">📊 ${t('compatibilityFactors')}</div>
+            <div class="factor-list">
+                ${result.factors.map((f, i) => {
+                    let pct = Math.round((f.score / f.maxScore) * 100);
+                    let barClass = pct >= 75 ? 'high' : pct >= 40 ? 'medium' : 'low';
+                    return `<div class="factor-item" style="animation:fadeIn 0.4s ${i*0.1}s ease-out forwards;opacity:0;">
+                        <div class="factor-header">
+                            <span class="factor-name">${f.name}</span>
+                            <span class="factor-score">${f.score}/${f.maxScore}</span>
+                        </div>
+                        <div class="factor-bar-bg"><div class="factor-bar-fill ${barClass}" style="width:${pct}%"></div></div>
+                        <div class="factor-desc">${f.desc}</div>
+                    </div>`;
+                }).join('')}
+            </div>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.3s">
+            <div class="section-title">✅ ${t('advantages')}</div>
+            <div class="procon-grid">
+                ${result.advantages.map(a => `<div class="procon-card advantage"><div class="procon-title">✓ ${t('advantages')}</div><div class="procon-text">${a}</div></div>`).join('')}
+            </div>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.4s">
+            <div class="section-title">⚠️ ${t('disadvantages')}</div>
+            <div class="procon-grid">
+                ${result.disadvantages.map(d => `<div class="procon-card disadvantage"><div class="procon-title">✗ ${t('disadvantages')}</div><div class="procon-text">${d}</div></div>`).join('')}
+            </div>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.5s">
+            <div class="section-title">🙏 ${t('remedies')}</div>
+            <div class="remedy-card">
+                <div class="remedy-title">📿 ${t('vedicRemedies')}</div>
+                <ul class="remedy-list">
+                    ${result.remedies.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+            </div>
+            <p style="font-size:0.8rem;color:var(--text-light);margin-top:12px;font-style:italic;">${t('personalizedNote')}</p>
+        </div>
+        <div class="card animate-fade" style="animation-delay:0.6s">
+            <div class="section-title">📤 ${t('shareResult')}</div>
+            <div class="share-grid">
+                <button class="share-btn" onclick="shareResult('${male.name}','${female.name}',${result.percentage},'${result.verdict}')">
+                    <span class="icon">📋</span>${t('copy')}
+                </button>
+                <button class="share-btn" onclick="window.print()">
+                    <span class="icon">🖨️</span>${t('print')}
+                </button>
+                <button class="share-btn" onclick="showScreen('home')">
+                    <span class="icon">🏠</span>${t('home')}
+                </button>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="showScreen('matchSelect')" style="margin-top:8px;"><span>💕</span> ${t('matchAnother')}</button>
+    `;
+}
+
+function updateResultsLanguage() {
+    if (!lastResult) return;
+    let male = profiles.find(p => p.id === selectedPerson1);
+    let female = profiles.find(p => p.id === selectedPerson2);
+    if (male && female) renderResults(lastResult, male, female);
+}
+
+function viewHistoryMatch(id) {
+    let entry = history.find(h => h.id === id);
+    if (!entry) return;
+    let male = profiles.find(p => p.id === entry.maleId);
+    let female = profiles.find(p => p.id === entry.femaleId);
+    if (!male || !female) { showToast(t('selectRequired')); return; }
+    let result = performAshtakoota(male.horoscope, female.horoscope);
+    lastResult = result;
+    showScreen('results');
+    renderResults(result, male, female);
+}
+
+function shareResult(mName, fName, score, verdict) {
+    let text = `${t('appTitle')} ${t('score')}\n\n${escapeHtml(mName)} ❤️ ${escapeHtml(fName)}\n${t('score')}: ${score}/100\n${t('verdict')}: ${verdict}\n\n${t('appTitle')} App`;
+    if (navigator.share) { navigator.share({ title: t('appTitle') + ' ' + t('score'), text: text }); }
+    else { navigator.clipboard.writeText(text).then(() => showToast(t('resultCopied'))); }
+}
+
+function renderAbout() {
+    let factors = [
+        { name: 'Varna', tamil: 'வர்ணம்', desc: t('varnaDesc') },
+        { name: 'Vashya', tamil: 'வசியம்', desc: t('vashyaDesc') },
+        { name: 'Tara', tamil: 'தினம்', desc: t('taraDesc') },
+        { name: 'Yoni', tamil: 'யோனி', desc: t('yoniDesc') },
+        { name: 'Graha Maitri', tamil: 'கிரக மைத்ரி', desc: t('grahaDesc') },
+        { name: 'Gana', tamil: 'கணம்', desc: t('ganaDesc') },
+        { name: 'Bhakoot', tamil: 'பாகூட்', desc: t('bhakootDesc') },
+        { name: 'Nadi', tamil: 'நாடி', desc: t('nadiDesc') },
+    ];
+    let factorHtml = factors.map((f, i) => {
+        let display = currentLang === 'ta' ? f.tamil : f.name;
+        return `<div style="background:var(--cream);padding:12px;border-radius:8px;border-left:3px solid var(--gold);"><strong style="color:var(--primary);font-size:0.9rem;">${i+1}. ${display}</strong><p style="font-size:0.8rem;color:var(--text-light);margin-top:4px;">${f.desc}</p></div>`;
+    }).join('');
+    document.getElementById('aboutFactors').innerHTML = factorHtml;
+
+    let scores = [
+        { emoji: '🟢', label: t('excellent') + ' (' + t('excellentRange') + ')', desc: t('excellentDesc'), color: 'var(--success)', bg: 'rgba(46,125,50,0.1)' },
+        { emoji: '🟡', label: t('good') + ' (' + t('goodRange') + ')', desc: t('goodDesc'), color: 'var(--warning)', bg: 'rgba(239,108,0,0.1)' },
+        { emoji: '🔴', label: t('challenging') + ' (' + t('challengingRange') + ')', desc: t('challengingDesc'), color: 'var(--danger)', bg: 'rgba(198,40,40,0.1)' },
+    ];
+    let scoreHtml = scores.map(s => {
+        return `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:${s.bg};border-radius:8px;"><span style="font-size:1.5rem;">${s.emoji}</span><div><strong style="color:${s.color};font-size:0.9rem;">${s.label}</strong><p style="font-size:0.8rem;color:var(--text-light);">${s.desc}</p></div></div>`;
+    }).join('');
+    document.getElementById('aboutScores').innerHTML = scoreHtml;
+}
+
+// Initialize
+updateStaticText();
+renderHome();
+</script>
+</body>
+</html>
